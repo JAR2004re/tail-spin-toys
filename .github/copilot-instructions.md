@@ -93,6 +93,7 @@ The application lives at the repository root:
 - `db/`: Drizzle schema, migrations, transforms, seed, and `games.csv`
 - `src/lib/`: Node SQLite client (`db.ts`) and data-access helpers (`games.ts`)
 - `src/components/`: reusable `.astro` components
+- `.github/extensions/`: project-shared Copilot extension providers (`extension.mjs`), including read-only canvases
 - `src/layouts/`: Astro layout templates
 - `src/pages/`: Astro page routes (`index.astro` listing, `game/[id].astro`, `404.astro`, `about.astro`)
 - `src/styles/`: CSS and Tailwind configuration
@@ -100,3 +101,5 @@ The application lives at the repository root:
 - `e2e-tests/`: Playwright E2E tests (home, games, accessibility)
 - `drizzle.config.ts`, `vitest.config.ts`, `astro.config.mjs`, `playwright.config.ts`: tooling config
 - `README.md`: Project documentation
+
+Project-shared canvases should live under `.github/extensions/<name>/` and follow the existing extension SDK pattern. Bind embedded HTTP servers to loopback only, keep catalog views read-only, and describe source data accurately; the Game Leaderboard uses catalog star ratings, not gameplay scores or live backing activity.

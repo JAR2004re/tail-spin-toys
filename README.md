@@ -7,12 +7,15 @@ Tailspin Toys is a crowdfunding platform for games with a developer theme. The p
 - **Astro 7** — pages, layouts, components, and routing. `output: 'static'`, so the whole site is prerendered to HTML at build time.
 - **Drizzle ORM + Node SQLite** — the data layer. The schema lives in `db/schema.ts`; data is seeded from `db/games.csv`. Migrations are managed with `drizzle-kit`.
 - **Tailwind CSS v4** — styling via utility classes (dark theme).
-- **Vitest** — unit tests for the data layer and pure transforms.
+- **Vitest** — unit tests for data access, pure transforms, and leaderboard ranking.
 - **Playwright** — end-to-end tests run against the built static site.
+- **Project-shared Copilot canvases** — extension providers live in `.github/extensions/`.
 
 Development commands are defined in `package.json`: npm runs Astro for the dev server, static build, and preview. The `predev` and `prebuild` npm hooks run the TypeScript database migration and seed tasks in `db/`, writing to the gitignored `tailspin.db` file.
 
 ## Using this template
+
+The project-shared **Game Leaderboard** canvas is available as a Copilot extension in `.github/extensions/game-leaderboard/`. It ranks the local game catalog by its existing star ratings and supports filtering by genre. The canvas is read-only; ratings are not gameplay scores or live backing activity. Set up the catalog with `npm run db:setup` before opening the canvas.
 
 This repository is a GitHub template. When you create a new repository from it, a one-time **Bootstrap template issues** workflow (`.github/workflows/bootstrap-issues.yml`) runs automatically on the first push to `main` and opens a set of starter issues describing suggested first features. Each issue is defined by a Markdown file in `.github/bootstrap-issues/` — the first heading becomes the issue title and the remaining content becomes the body — so you can edit, add, or remove files there to control which issues are created.
 
@@ -60,7 +63,7 @@ npm run db:export     # write the seeded catalog to db/catalog.json
 ## Running tests
 
 ```bash
-npm run test:unit   # Vitest unit tests (transforms + data-access helpers)
+npm run test:unit   # Vitest unit tests (transforms, data access, and leaderboard ranking)
 npm run test:e2e    # Playwright E2E tests (builds + previews the static site first)
 ```
 
