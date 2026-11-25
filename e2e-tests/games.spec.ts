@@ -1,6 +1,41 @@
 import { test, expect, type Response } from '@playwright/test';
 
 test.describe('Game Listing and Navigation', () => {
+  test('filters games by title as the user types and submits', async ({ page }) => {
+    await page.goto('/');
+
+    const searchInput = page.getByRole('searchbox', { name: 'Search games by title' });
+    const firstGame = page.getByTestId('game-card').first();
+    const secondGame = page.getByTestId('game-card').nth(1);
+    const firstGameTitle = (await firstGame.getAttribute('data-game-title')) ?? '';
+
+    expect(firstGameTitle).not.toBe('');
+    await searchInput.fill(firstGameTitle.toUpperCase());
+
+    await expect(firstGame).toBeVisible();
+    await expect(secondGame).toBeHidden();
+    await searchInput.press('Enter');
+    await expect(page).toHaveURL('/');
+    await expect(firstGame).toBeVisible();
+  });
+
+  test('shows an empty state for unmatched titles and restores games when cleared', async ({ page }) => {
+    await page.goto('/');
+
+    const searchInput = page.getByRole('searchbox', { name: 'Search games by title' });
+    const firstGame = page.getByTestId('game-card').first();
+    const emptyState = page.getByTestId('search-empty-state');
+
+    await searchInput.fill('no game has this title');
+    await expect(firstGame).toBeHidden();
+    await expect(emptyState).toBeVisible();
+    await expect(emptyState).toContainText('No games match your search.');
+
+    await searchInput.clear();
+    await expect(firstGame).toBeVisible();
+    await expect(emptyState).toBeHidden();
+  });
+
   test('should display games with titles on index page', async ({ page }) => {
     await test.step('Navigate to homepage', async () => {
       await page.goto('/');
