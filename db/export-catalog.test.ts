@@ -19,8 +19,8 @@ function makeGame(overrides: Partial<Game> = {}): Game {
         title: 'Merge Conflict',
         description: 'A co-op game about resolving conflicts.',
         starRating: 4.5,
-        category: { id: 1, name: 'Strategy' },
-        publisher: { id: 1, name: 'Rebase Games' },
+        category: { id: 1, name: 'Strategy', description: null },
+        publisher: { id: 1, name: 'Rebase Games', description: null },
         ...overrides,
     };
 }
@@ -93,9 +93,9 @@ describe('toCatalogExport', () => {
 
     it('lists distinct categories and publishers alphabetically', () => {
         const exported = toCatalogExport([
-            makeGame({ id: 1, category: { id: 2, name: 'Puzzle' }, publisher: { id: 2, name: 'Stack Overflow Studios' } }),
-            makeGame({ id: 2, title: 'Second', category: { id: 1, name: 'Strategy' }, publisher: { id: 1, name: 'Rebase Games' } }),
-            makeGame({ id: 3, title: 'Third', category: { id: 1, name: 'Strategy' }, publisher: { id: 1, name: 'Rebase Games' } }),
+            makeGame({ id: 1, category: { id: 2, name: 'Puzzle', description: null }, publisher: { id: 2, name: 'Stack Overflow Studios', description: null } }),
+            makeGame({ id: 2, title: 'Second', category: { id: 1, name: 'Strategy', description: null }, publisher: { id: 1, name: 'Rebase Games', description: null } }),
+            makeGame({ id: 3, title: 'Third', category: { id: 1, name: 'Strategy', description: null }, publisher: { id: 1, name: 'Rebase Games', description: null } }),
         ]);
 
         expect(exported.categories).toEqual(['Puzzle', 'Strategy']);
@@ -104,9 +104,9 @@ describe('toCatalogExport', () => {
 
     it('sorts distinct categories/publishers by ordinal code unit', () => {
         const exported = toCatalogExport([
-            makeGame({ id: 1, category: { id: 1, name: 'zeta' }, publisher: { id: 1, name: 'zeta' } }),
-            makeGame({ id: 2, title: 'Second', category: { id: 2, name: 'Zeta' }, publisher: { id: 2, name: 'Zeta' } }),
-            makeGame({ id: 3, title: 'Third', category: { id: 3, name: 'Ínca' }, publisher: { id: 3, name: 'Ínca' } }),
+            makeGame({ id: 1, category: { id: 1, name: 'zeta', description: null }, publisher: { id: 1, name: 'zeta', description: null } }),
+            makeGame({ id: 2, title: 'Second', category: { id: 2, name: 'Zeta', description: null }, publisher: { id: 2, name: 'Zeta', description: null } }),
+            makeGame({ id: 3, title: 'Third', category: { id: 3, name: 'Ínca', description: null }, publisher: { id: 3, name: 'Ínca', description: null } }),
         ]);
 
         expect(exported.categories).toEqual(['Zeta', 'zeta', 'Ínca']);

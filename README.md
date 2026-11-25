@@ -4,6 +4,8 @@ Tailspin Toys is a crowdfunding platform for games with a developer theme. The p
 
 ## Architecture
 
+Game detail pages show the descriptions for a game's category and publisher when those descriptions are available.
+
 - **Astro 7** — pages, layouts, components, and routing. `output: 'static'`, so the whole site is prerendered to HTML at build time.
 - **Drizzle ORM + Node SQLite** — the data layer. The schema lives in `db/schema.ts`; data is seeded from `db/games.csv`. Migrations are managed with `drizzle-kit`.
 - **Tailwind CSS v4** — styling via utility classes (dark theme).
