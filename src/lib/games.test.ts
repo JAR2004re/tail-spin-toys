@@ -6,9 +6,14 @@ import {
     getAllGames,
     getAllGameIds,
     getGameById,
+    getCatalogSummary,
 } from './games';
 
-async function seedGames(db: Database, count: number): Promise<void> {
+async function seedGames(
+    db: Database,
+    count: number,
+    ratings: (number | null)[] = new Array(count).fill(4.2),
+): Promise<void> {
     const [category] = await db
         .insert(categories)
         .values({ name: 'Strategy', description: 'cat' })
@@ -23,7 +28,7 @@ async function seedGames(db: Database, count: number): Promise<void> {
         await db.insert(games).values({
             title: `Game ${String(i).padStart(2, '0')}`,
             description: `Description ${i}`,
-            starRating: 4.2,
+            starRating: ratings[i - 1],
             categoryId: category.id,
             publisherId: publisher.id,
         });
@@ -50,6 +55,31 @@ describe('games data-access helpers', () => {
         const ids = await getAllGameIds(db);
         const all = await getAllGames(db);
         expect(ids).toEqual(all.map((g) => g.id));
+    });
+
+    it('returns the total game count and average of rated games', async () => {
+        await seedGames(db, 3, [4.5, null, 3.5]);
+
+        expect(await getCatalogSummary(db)).toEqual({
+            gameCount: 3,
+            averageRating: 4,
+        });
+    });
+
+    it('returns a zero count and no average for an empty catalog', async () => {
+        expect(await getCatalogSummary(db)).toEqual({
+            gameCount: 0,
+            averageRating: null,
+        });
+    });
+
+    it('returns no average when the catalog has no rated games', async () => {
+        await seedGames(db, 2, [null, null]);
+
+        expect(await getCatalogSummary(db)).toEqual({
+            gameCount: 2,
+            averageRating: null,
+        });
     });
 
     it('fetches a single game by id', async () => {
